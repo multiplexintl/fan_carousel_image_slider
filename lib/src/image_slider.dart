@@ -12,6 +12,8 @@ class FanCarouselImageSlider extends StatelessWidget {
     this.showIndicator = true,
     this.showArrowNav = false,
     this.initalPageIndex = 1,
+    // custom
+    this.onTap,
     this.sliderHeight = 500,
     this.sliderWidth = double.infinity,
     this.turns = 250,
@@ -26,8 +28,14 @@ class FanCarouselImageSlider extends StatelessWidget {
     this.autoPlay = true,
     this.userCanDrag = true,
     this.currentItemShadow = const [
-      BoxShadow(offset: Offset(1, 1), color: Color.fromARGB(78, 158, 158, 158), blurRadius: 10),
-      BoxShadow(offset: Offset(-1, -1), color: Color.fromARGB(78, 158, 158, 158), blurRadius: 10),
+      BoxShadow(
+          offset: Offset(1, 1),
+          color: Color.fromARGB(78, 158, 158, 158),
+          blurRadius: 10),
+      BoxShadow(
+          offset: Offset(-1, -1),
+          color: Color.fromARGB(78, 158, 158, 158),
+          blurRadius: 10),
     ],
     this.sideItemsShadow,
     this.isClickable = true,
@@ -44,7 +52,8 @@ class FanCarouselImageSlider extends StatelessWidget {
         )),
     this.expandedCloseBtnDecoration,
   })  : assert(imagesLink.length > 0),
-        assert(initalPageIndex <= (imagesLink.length - 1) && initalPageIndex >= 0),
+        assert(
+            initalPageIndex <= (imagesLink.length - 1) && initalPageIndex >= 0),
         imageSliderType = ImageSliderType.imageSliderType1;
 
   const FanCarouselImageSlider.sliderType2({
@@ -57,6 +66,8 @@ class FanCarouselImageSlider extends StatelessWidget {
     this.sidesOpacity = 0.8,
     this.imageRadius = 40,
     this.imageFitMode = BoxFit.cover,
+    // custom
+    this.onTap,
     this.slideViewportFraction = 0.7,
     this.sliderDuration = const Duration(milliseconds: 600),
     this.indicatorActiveColor = Colors.pink,
@@ -65,8 +76,14 @@ class FanCarouselImageSlider extends StatelessWidget {
     this.autoPlay = true,
     this.userCanDrag = true,
     this.currentItemShadow = const [
-      BoxShadow(offset: Offset(1, 1), color: Color.fromARGB(78, 158, 158, 158), blurRadius: 10),
-      BoxShadow(offset: Offset(-1, -1), color: Color.fromARGB(78, 158, 158, 158), blurRadius: 10),
+      BoxShadow(
+          offset: Offset(1, 1),
+          color: Color.fromARGB(78, 158, 158, 158),
+          blurRadius: 10),
+      BoxShadow(
+          offset: Offset(-1, -1),
+          color: Color.fromARGB(78, 158, 158, 158),
+          blurRadius: 10),
     ],
     this.sideItemsShadow,
     this.isClickable = true,
@@ -83,7 +100,8 @@ class FanCarouselImageSlider extends StatelessWidget {
         )),
     this.expandedCloseBtnDecoration,
   })  : assert(imagesLink.length > 0),
-        assert(initalPageIndex <= (imagesLink.length - 1) && initalPageIndex >= 0),
+        assert(
+            initalPageIndex <= (imagesLink.length - 1) && initalPageIndex >= 0),
         imageSliderType = ImageSliderType.imageSliderType2,
         turns = 250,
         showIndicator = true,
@@ -209,9 +227,13 @@ class FanCarouselImageSlider extends StatelessWidget {
 
   final ImageSliderType imageSliderType;
 
+  // Custom made variable
+  final Function(int index)? onTap;
+
   @override
   Widget build(BuildContext context) => switch (imageSliderType) {
         ImageSliderType.imageSliderType1 => ImageSliderType1Widget(
+            onTap: onTap,
             imagesLink: imagesLink,
             isAssets: isAssets,
             showIndicator: showIndicator,
