@@ -37,6 +37,7 @@ class ImageSliderType1Widget extends StatefulWidget {
     required this.expandedCloseBtn,
     required this.expandedCloseChild,
     required this.expandedCloseBtnDecoration,
+    required this.onTap,
   });
 
   final List<String> imagesLink;
@@ -95,6 +96,9 @@ class ImageSliderType1Widget extends StatefulWidget {
 
   final BoxDecoration? expandedCloseBtnDecoration;
 
+  // Custom made variable
+  final Function(int index)? onTap;
+
   @override
   State<ImageSliderType1Widget> createState() => _ImageSliderType1State();
 }
@@ -120,8 +124,9 @@ class _ImageSliderType1State extends State<ImageSliderType1Widget> {
     super.initState();
 
     _currentIndex = ValueNotifier<int>(widget.initalPageIndex);
-    _pageController =
-        PageController(initialPage: _currentIndex.value, viewportFraction: widget.slideViewportFraction);
+    _pageController = PageController(
+        initialPage: _currentIndex.value,
+        viewportFraction: widget.slideViewportFraction);
 
     if (widget.autoPlay) _autoPlayeTimerStart();
   }
@@ -146,17 +151,21 @@ class _ImageSliderType1State extends State<ImageSliderType1Widget> {
           child: ValueListenableBuilder<bool>(
             valueListenable: _isExpandSlide,
             builder: (context, isExpand, child) {
-              if (widget.autoPlay) (isExpand) ? _timer?.cancel() : _autoPlayeTimerStart();
-              expandedImage = (isExpand) ? widget.imagesLink[_currentIndex.value] : null;
+              if (widget.autoPlay)
+                (isExpand) ? _timer?.cancel() : _autoPlayeTimerStart();
+              expandedImage =
+                  (isExpand) ? widget.imagesLink[_currentIndex.value] : null;
               return AnimatedContainer(
                   margin: const EdgeInsets.only(top: 15),
                   duration: widget.sliderDuration,
                   width: (!isExpand)
                       ? 100
-                      : (widget.expandImageWidth ?? MediaQuery.of(context).size.width * 0.9),
+                      : (widget.expandImageWidth ??
+                          MediaQuery.of(context).size.width * 0.9),
                   height: (!isExpand)
                       ? 0
-                      : (widget.expandImageHeight ?? (MediaQuery.of(context).size.height * 0.8)),
+                      : (widget.expandImageHeight ??
+                          (MediaQuery.of(context).size.height * 0.8)),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(widget.imageRadius),
                     image: (expandedImage != null)
@@ -209,7 +218,10 @@ class _ImageSliderType1State extends State<ImageSliderType1Widget> {
                         : const NeverScrollableScrollPhysics(),
                     controller: _pageController,
                     onPageChanged: (newIndex) {
-                      if (!_isAutoAnimate) (actualIndex < newIndex) ? _goNextPage() : _goPrevPage();
+                      if (!_isAutoAnimate)
+                        (actualIndex < newIndex)
+                            ? _goNextPage()
+                            : _goPrevPage();
                     },
                     itemCount: widget.imagesLink.length,
                     itemBuilder: (context, index) {
@@ -225,11 +237,12 @@ class _ImageSliderType1State extends State<ImageSliderType1Widget> {
                         turns: widget.turns,
                         currentItemShadow: widget.currentItemShadow,
                         sideItemsShadow: widget.sideItemsShadow,
-                        onSlideClick: () {
-                          if (widget.isClickable && index == actualIndex) {
-                            _isExpandSlide.value = true;
-                          }
-                        },
+                        onSlideClick: () => widget.onTap!(_currentIndex.value!),
+                        // onSlideClick: () {
+                        //   if (widget.isClickable && index == actualIndex) {
+                        //     _isExpandSlide.value = true;
+                        //   }
+                        // },
                       );
                     },
                   ),
